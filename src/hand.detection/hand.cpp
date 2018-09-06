@@ -21,10 +21,10 @@ vector<std::vector<cv::Point> > cont;
 double area, pa;
 Point2f cen;
 float rad;
-//Scalar sc1 = Scalar(80,85,135);
-//Scalar sc2 = Scalar(240,135,180);
-Scalar sc1 = Scalar(0,85,135);
+Scalar sc1 = Scalar(80,85,135);
 Scalar sc2 = Scalar(240,135,180);
+//Scalar sc1 = Scalar(0,85,135);
+//Scalar sc2 = Scalar(240,135,180);
 vector<Point> poly;
 Point prev;
 int dx, dy;
@@ -38,7 +38,7 @@ Mat TRANS1, EMIS1, INIT1;
 Mat TRANS2, EMIS2, INIT2;
 Mat TRANS3, EMIS3, INIT3;
 Mat TRANS4, EMIS4, INIT4;
-string fac = "../xml/haarcascade_frontalface_alt2.xml";
+string fac = "/home/tushardobhal/Desktop/OpenCV 245/cpp/xml/haarcascade_frontalface_alt2.xml";
 CascadeClassifier face_cascade;
 int q = 0;
 
@@ -224,6 +224,7 @@ void color()
         fgimg = Scalar::all(0);
         img.copyTo(fgimg, fgmask);
         face_cascade.detectMultiScale( img, faces, 1.1, 4, CV_HAAR_FIND_BIGGEST_OBJECT|CV_HAAR_SCALE_IMAGE, Size(100, 100));
+        if(faces.size() >= 1)
         fgimg(Range(faces[0].y+0.0*faces[0].height,faces[0].y+1.0*faces[0].height),Range(faces[0].x+0.0*faces[0].width,faces[0].x+1.0*faces[0].width)) = Scalar::all(0);
         cvtColor(fgimg,fgimg,CV_BGR2YUV);
         inRange(fgimg, sc1, sc2,out);
@@ -246,7 +247,7 @@ void color()
                 }
        }
        
-       if(max > 10000)
+       if(max > 1000)
        {
            int miny = 480;
            int y =0;
@@ -292,11 +293,14 @@ int main()
          
         cvtColor(fgimg, fgimg, CV_YUV2BGR);
              
-         
+        char ch[20];
+        sprintf(ch,"im/%d.jpg",z); 
         imshow("IMAGE", img);
         imshow("IMAGE1", fgimg);
+        imwrite(ch,img);
         if(cv::waitKey(30)==27)
               exit(0);
+         ++z;
       }
       return(0);
 }
